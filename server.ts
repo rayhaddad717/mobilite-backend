@@ -3,8 +3,10 @@ import database from "./db";
 import University from "./models/UniversityModel";
 import bodyParser from "body-parser";
 import universityRoutes from "./routes/UniversityRoutes";
+import departmentRoutes from "./routes/DepartmentRoutes";
 import morgan from "morgan";
 import cors from "cors";
+import Department from "./models/DepartmentModel";
 
 const app = express();
 app.get("/api", (req, res) => {
@@ -25,6 +27,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // Use the route files
+app.use("/api/department", departmentRoutes);
 app.use("/api/university", universityRoutes);
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
@@ -44,6 +47,7 @@ class BootStrap {
   }
   async addTableRelations() {
     await University.sync({ alter: true });
+    await Department.sync({ alter: true });
   }
 }
 new BootStrap().init();

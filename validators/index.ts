@@ -7,4 +7,11 @@ export const VALIDATORS = {
   DeleteUniversitySchena: Joi.object({
     id: Joi.number().required(),
   }),
+  DepartmentValidatorSchema: Joi.object({
+    department_name: Joi.string().required(),
+    id: Joi.number().optional(),
+  }),
+  DeleteDepartmentSchema: Joi.object({
+    id: Joi.number().required(),
+  }),
 };
