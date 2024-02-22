@@ -5,6 +5,7 @@ import bodyParser from "body-parser";
 import universityRoutes from "./routes/UniversityRoutes";
 import morgan from "morgan";
 import cors from "cors";
+
 const app = express();
 app.get("/api", (req, res) => {
   res.send("Hello World!");
