@@ -4,11 +4,13 @@ import University from "./models/UniversityModel";
 //import Bourse from "./models/BourseModel";
 import bodyParser from "body-parser";
 import universityRoutes from "./routes/UniversityRoutes";
-import departmentRoutes from "./routes/DepartmentRoutes";
-//import bourseRoutes from "./routes/BourseRoutes";
+import scholarshipRoutes from "./routes/ScholarshipRoutes";
+import mastersRoutes from "./routes/MasterRoutes";
 import morgan from "morgan";
 import cors from "cors";
 import Department from "./models/DepartmentModel";
+import Scholarship from "./models/ScholarshipModel";
+import Masters from "./models/MastersModel";
 
 const app = express();
 app.get("/api", (req, res) => {
@@ -29,8 +31,9 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // Use the route files
-app.use("/api/department", departmentRoutes);
+app.use("/api/scholarship", scholarshipRoutes);
 app.use("/api/university", universityRoutes);
+app.use("/api/masters", mastersRoutes);
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
@@ -51,7 +54,10 @@ class BootStrap {
   }
   async addTableRelations() {
     await University.sync({ alter: true });
-    await Department.sync({ alter: true });
+    await Scholarship.sync({ alter: true });
+    Masters.belongsTo(University, { foreignKey: "university_id" });
+    Masters.belongsTo(Scholarship, { foreignKey: "id_bourse" });
+    await Masters.sync({ alter: true });
   }
 }
 new BootStrap().init();

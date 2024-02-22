@@ -4,15 +4,15 @@ import CONSTANT from "../config";
 import University from "../models/UniversityModel";
 import upload from "../upload";
 import ExcelJS from "exceljs";
-import { departmentController } from "../controllers/DepartmentController";
-import Department from "../models/DepartmentModel";
+import { masterController } from "../controllers/MastersController";
+import Masters from "../models/MastersModel";
 const { createValidator } = require("express-joi-validation");
 const router = express.Router();
 const validator = createValidator();
 //EXPORT TO EXCEL
 router.get("/export", async (req, res) => {
   try {
-    const workbook = await departmentController.exportToExcel();
+    const workbook = await masterController.exportToExcel();
     // Set the headers to prompt download
     res.setHeader(
       "Content-Type",
@@ -38,7 +38,7 @@ router.post("/import", upload.single("file"), async (req, res) => {
     const workbook = new ExcelJS.Workbook();
     if (!req.file) throw Error("No file selected");
     await workbook.xlsx.load(req.file.buffer);
-    await departmentController.importFromExcel(workbook);
+    await masterController.importFromExcel(workbook);
 
     res.json(
       CONSTANT.HTTP_RESPONSES.OK<null>(
@@ -53,11 +53,11 @@ router.post("/import", upload.single("file"), async (req, res) => {
 //GET
 router.get("/:id", async (req, res) => {
   try {
-    const result = await departmentController.getDepartment({
+    const result = await masterController.getMasters({
       id: Number(req.params.id),
     });
     return res.json(
-      CONSTANT.HTTP_RESPONSES.OK<Department | null>(
+      CONSTANT.HTTP_RESPONSES.OK<Masters | null>(
         result,
         "Successfully returned university"
       )
@@ -69,7 +69,7 @@ router.get("/:id", async (req, res) => {
 //LIST
 router.get("/", async (req, res) => {
   try {
-    const result = await departmentController.listDepartment();
+    const result = await masterController.listMasters();
     return res.json(result);
   } catch (error: any) {
     return res.json(CONSTANT.HTTP_RESPONSES.ERROR(error.toString()));
@@ -78,10 +78,10 @@ router.get("/", async (req, res) => {
 // DELETE
 router.delete(
   "/:id",
-  validator.params(VALIDATORS.DeleteDepartmentSchema),
+  validator.params(VALIDATORS.DeleteMastersSchema),
   async (req, res) => {
     try {
-      const result = await departmentController.deleteDepartment({
+      const result = await masterController.deleteMasters({
         id: Number(req.params.id),
       });
       return res.json(
@@ -98,12 +98,10 @@ router.delete(
 //CREATE OR ADD
 router.post(
   "/",
-  //   validator.body(VALIDATORS.DepartmentValidatorSchema),
+  validator.body(VALIDATORS.MastersValidatorSchema),
   async (req, res) => {
     try {
-      const result = await departmentController.createOrEditDepartment(
-        req.body
-      );
+      const result = await masterController.createOrEditMasters(req.body);
       res.json(result);
     } catch (error: any) {
       return res.json(CONSTANT.HTTP_RESPONSES.ERROR(error.toString()));
