@@ -1,5 +1,11 @@
 export interface CreateOrEditUniversityRequest {
   university_name: string;
+  country:string;
+  website:string;
+  is_free:boolean;
+  convention_info:string;
+  convention_date:Date;
+  procedure_inscription:string;
   id?: number;
 }
 export interface DeleteUniversityRequest {
@@ -16,6 +22,8 @@ export interface DeleteDepartmentRequest {
   id: number;
 }
 export interface GetDepartmentRequest {
+  id: number;
+}
 export interface CreateBourseRequest {
   bourse_name: string;
 }

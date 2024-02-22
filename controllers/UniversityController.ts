@@ -48,6 +48,12 @@ export class UniversityController {
       } else {
         university = await University.create({
           university_name: payload.university_name,
+          country:payload.country,
+          website:payload.website,
+          is_free:payload.is_free,
+          convention_info:payload.convention_info,
+          convention_date:payload.convention_date,
+          procedure_inscription:payload.procedure_inscription
         });
         return CONSTANT.HTTP_RESPONSES.CREATED<University>(
           university,
@@ -75,6 +81,8 @@ export class UniversityController {
       worksheet.columns = [
         { header: "Id", key: "id", width: 10 },
         { header: "Name", key: "university_name", width: 30 },
+        { header:"Country",key:"country",width:30},
+        { header: "Website", key:"website",width:30},
         // Add more columns as necessary
       ];
 
@@ -98,12 +106,14 @@ export class UniversityController {
           // Assuming the first row is headers
           // Extract data from each row to create a university entry
           const university_name = row.getCell(1).value;
+          const country=row.getCell(2).value;
           // Add more fields as necessary
 
           // Create university entry in the database
           try {
             await University.create({
               university_name,
+              country,
             });
           } catch (error) {
             console.error("Error creating university entry:", error);

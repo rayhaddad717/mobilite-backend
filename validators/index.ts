@@ -3,6 +3,8 @@ export const VALIDATORS = {
   UniversityValidatorSchema: Joi.object({
     university_name: Joi.string().required(),
     id: Joi.number().optional(),
+    country: Joi.string().required(),
+    website:Joi.string().required()
   }),
   DeleteUniversitySchema: Joi.object({
     id: Joi.number().required(),
