@@ -1,9 +1,11 @@
 import express from "express";
 import database from "./db";
 import University from "./models/UniversityModel";
+//import Bourse from "./models/BourseModel";
 import bodyParser from "body-parser";
 import universityRoutes from "./routes/UniversityRoutes";
 import departmentRoutes from "./routes/DepartmentRoutes";
+//import bourseRoutes from "./routes/BourseRoutes";
 import morgan from "morgan";
 import cors from "cors";
 import Department from "./models/DepartmentModel";
@@ -32,6 +34,8 @@ app.use("/api/university", universityRoutes);
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
+
+// app.use("/api/bourse",)
 
 class BootStrap {
   constructor() {}

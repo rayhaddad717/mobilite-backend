@@ -16,5 +16,15 @@ export interface DeleteDepartmentRequest {
   id: number;
 }
 export interface GetDepartmentRequest {
+export interface CreateBourseRequest {
+  bourse_name: string;
+}
+export interface DeleteBourseRequest {
+  id: number;
+}
+export interface CreateInscriptionRequest {
+  Name: string;
+}
+export interface DeleteInscriptionRequest {
   id: number;
 }

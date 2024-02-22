@@ -77,7 +77,7 @@ router.get("/", async (req, res) => {
 // DELETE
 router.delete(
   "/:id",
-  validator.params(VALIDATORS.DeleteUniversitySchena),
+  validator.params(VALIDATORS.DeleteUniversitySchema),
   async (req, res) => {
     try {
       const result = await universityController.deleteUniversity({

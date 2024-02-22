@@ -4,7 +4,19 @@ export const VALIDATORS = {
     university_name: Joi.string().required(),
     id: Joi.number().optional(),
   }),
-  DeleteUniversitySchena: Joi.object({
+  DeleteUniversitySchema: Joi.object({
+    id: Joi.number().required(),
+  }),
+  BourseValidatorSchema: Joi.object({
+    bourse_name: Joi.string().required(),
+  }),
+  DeleteBourseSchema: Joi.object({
+    id: Joi.number().required(),
+  }),
+  InscriptionValidatorSchema: Joi.object({
+    Name: Joi.string().required(),
+  }),
+  DeleteInscriptionSchema: Joi.object({
     id: Joi.number().required(),
   }),
   DepartmentValidatorSchema: Joi.object({
