@@ -1,9 +1,23 @@
 import sequelize from "sequelize";
 import database from "../db";
 import * as Sequelize from "sequelize";
+import Masters from "./MastersModel";
+import Students from "./StudentsModel";
 class StudentsInscription extends Sequelize.Model {
   declare id: number;
-  declare name: string;
+  declare student_id: number;
+  declare master_id: number;
+  declare university_id: number;
+  declare is_admitted: boolean;
+  declare is_confirmed: boolean;
+  declare has_scholarship: boolean;
+  declare motivation_letter_file: string | null; //base 64 pdf
+  declare recommendation_letter_file: string | null; //base 64 pdf
+  declare cv_file: string | null; //base 64 pdf
+  declare admission_letter_file: string | null; //base 64 pdf
+  declare nomination_letter_file: string | null; //base 64 pdf
+  declare master?: Masters;
+  declare student?: Students;
 }
 StudentsInscription.init(
   {
@@ -12,54 +26,46 @@ StudentsInscription.init(
       primaryKey: true,
       autoIncrement: true,
     },
-    name: {
+    student_id: {
+      type: Sequelize.DataTypes.INTEGER,
+    },
+    master_id: {
+      type: Sequelize.DataTypes.INTEGER,
+    },
+    university_id: {
+      type: Sequelize.DataTypes.INTEGER,
+    },
+    is_admitted: {
+      type: Sequelize.DataTypes.BOOLEAN,
+    },
+    is_confirmed: {
+      type: Sequelize.DataTypes.BOOLEAN,
+    },
+    has_scholarship: {
+      type: Sequelize.DataTypes.BOOLEAN,
+    },
+    motivation_letter_file: {
       type: Sequelize.DataTypes.TEXT,
+      allowNull: true, // Nullable field
     },
-    family:{
+    recommendation_letter_file: {
       type: Sequelize.DataTypes.TEXT,
+      allowNull: true, // Nullable field
     },
-    nbr_dossier:{
-        type:Sequelize.DataTypes.INTEGER,
+    cv_file: {
+      type: Sequelize.DataTypes.TEXT,
+      allowNull: true, // Nullable field
     },
-    type_diploma:{
-        type:Sequelize.DataTypes.INTEGER, //type diplome
+    admission_letter_file: {
+      type: Sequelize.DataTypes.TEXT,
+      allowNull: true, // Nullable field
     },
-    phone:{
-        type:Sequelize.DataTypes.INTEGER,
+    nomination_letter_file: {
+      type: Sequelize.DataTypes.TEXT,
+      allowNull: true, // Nullable field
     },
-    email:{
-        type:Sequelize.DataTypes.TEXT,
-    },
-    departement:{
-        type:Sequelize.DataTypes.TEXT, //type departement
-    },
-    year:{
-        type:Sequelize.DataTypes.INTEGER,
-    },
-    branch:{
-        type:Sequelize.DataTypes.INTEGER, //type branch
-    },
-    average:{
-       type:Sequelize.DataTypes.INTEGER,
-    },
-    grades:{
-        type:Sequelize.DataTypes.TEXT,
-    },
-    eligible:{
-        type:Sequelize.DataTypes.BOOLEAN,
-    },
-    expected_grad_date:{
-        type:Sequelize.DataTypes.DATE,
-    },
-    id_university:{
-        type:Sequelize.DataTypes.INTEGER,
-    },
-    comment:{
-        type:Sequelize.DataTypes.TEXT,
-    } 
   },
   {
-    // Enable timestamps
     sequelize: database,
     timestamps: true,
   }

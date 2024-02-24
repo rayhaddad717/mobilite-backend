@@ -1,19 +1,23 @@
 import database from "../db";
 import * as Sequelize from "sequelize";
-class Department extends Sequelize.Model {
+class Admins extends Sequelize.Model {
   declare id: number;
-  declare department_name: string;
+  declare username: string;
+  declare password_hash: string;
 }
-Department.init(
+Admins.init(
   {
     id: {
       type: Sequelize.DataTypes.INTEGER,
       primaryKey: true,
       autoIncrement: true,
     },
-    department_name: {
+    username: {
       type: Sequelize.DataTypes.TEXT,
-    }
+    },
+    password_hash: {
+      type: Sequelize.DataTypes.TEXT,
+    },
   },
   {
     // Enable timestamps
@@ -21,4 +25,4 @@ Department.init(
     timestamps: true,
   }
 );
-export default Department;
+export default Admins;

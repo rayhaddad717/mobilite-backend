@@ -5,7 +5,7 @@ import University from "../models/UniversityModel";
 import upload from "../upload";
 import ExcelJS from "exceljs";
 import { scholarshipController } from "../controllers/ScholarshipController";
-import Department from "../models/DepartmentModel";
+import Admins from "../models/AdminModel";
 import Scholarship from "../models/ScholarshipModel";
 const { createValidator } = require("express-joi-validation");
 const router = express.Router();

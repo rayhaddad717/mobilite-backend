@@ -3,6 +3,7 @@ import * as Sequelize from "sequelize";
 class University extends Sequelize.Model {
   declare id: number;
   declare university_name: string;
+  declare country: string;
 }
 University.init(
   {
@@ -14,29 +15,28 @@ University.init(
     university_name: {
       type: Sequelize.DataTypes.TEXT,
     },
-    country:{
+    country: {
       type: Sequelize.DataTypes.TEXT,
     },
     is_free: {
       type: Sequelize.DataTypes.BOOLEAN,
     },
-    website:{
-      type:Sequelize.DataTypes.TEXT,
-    },
-    convention_info:{
+    website: {
       type: Sequelize.DataTypes.TEXT,
     },
-    convention_date:{
-      type:Sequelize.DataTypes.DATE,
+    convention_info: {
+      type: Sequelize.DataTypes.TEXT,
     },
-    procedure_inscription:{
-      type:Sequelize.DataTypes.TEXT,
-    }
+    convention_date: {
+      type: Sequelize.DataTypes.DATE,
+    },
+    procedure_inscription: {
+      type: Sequelize.DataTypes.TEXT,
+    },
     // ,
     // image:{
     //   type:Sequelize.DataTypes.TEXT,
     // }
-
   },
   {
     // Enable timestamps

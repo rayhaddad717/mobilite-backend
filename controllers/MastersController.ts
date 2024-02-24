@@ -21,7 +21,10 @@ export class MastersController {
   //LIST
   async listMasters() {
     try {
-      return await Masters.findAll({ order: [["id", "desc"]] });
+      return await Masters.findAll({
+        order: [["id", "desc"]],
+        include: [{ model: University }],
+      });
     } catch (error) {
       throw error;
     }
@@ -36,6 +39,9 @@ export class MastersController {
   async createOrEditMasters(payload: CreateOrEditMastersRequest) {
     try {
       let master: Masters;
+      if (payload.id_bourse === -1) {
+        payload.id_bourse = null;
+      }
       if (payload.id) {
         const res = await Masters.update(payload, {
           where: {
@@ -59,11 +65,12 @@ export class MastersController {
           exemption_fees: payload.exemption_fees,
           entretien_motivation: payload.entretien_motivation,
           oral_exam: payload.oral_exam,
+          date_d_appel: payload.date_d_appel,
           written_exam: payload.written_exam,
           nb_students: payload.nb_students,
           result_dates: payload.result_dates,
           date_candidature_deposit: payload.date_candidature_deposit,
-          id_bourse: payload.id_bourse,
+          id_bourse: payload.id_bourse === -1 ? null : payload.id_bourse,
         });
         return CONSTANT.HTTP_RESPONSES.CREATED<Masters>(
           master,
@@ -134,9 +141,16 @@ export class MastersController {
           recrutement_sur_dossier: master.recrutement_sur_dossier
             ? "Yes"
             : "No",
-          oral_exam: master.oral_exam ? "Yes" : "No",
-          entretien_motivation: master.entretien_motivation ? "Yes" : "No",
-          written_exam: master.written_exam ? "Yes" : "No",
+          date_d_appel: master.date_d_appel
+            ? format(master.date_d_appel, "PPP")
+            : "No",
+          oral_exam: master.oral_exam ? format(master.oral_exam, "PPP") : "No",
+          entretien_motivation: master.entretien_motivation
+            ? format(master.entretien_motivation, "PPP")
+            : "No",
+          written_exam: master.written_exam
+            ? format(master.written_exam, "PPP")
+            : "No",
           university_name: master.University?.university_name,
           scholarship_name: master.Scholarship?.name,
           result_dates: format(master.result_dates, "PPP"),

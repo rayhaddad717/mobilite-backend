@@ -12,9 +12,10 @@ class Masters extends Sequelize.Model {
   declare language_required: string;
   declare recrutement_sur_dossier: boolean;
   declare exemption_fees: number;
-  declare entretien_motivation: boolean;
-  declare oral_exam: boolean;
-  declare written_exam: boolean;
+  declare entretien_motivation: Date | null;
+  declare oral_exam: Date | null;
+  declare date_d_appel: Date | null;
+  declare written_exam: Date | null;
   declare nb_students: number;
   declare result_dates: Date;
   declare date_candidature_deposit: Date;
@@ -51,13 +52,16 @@ Masters.init(
       type: Sequelize.DataTypes.FLOAT,
     },
     entretien_motivation: {
-      type: Sequelize.DataTypes.BOOLEAN,
+      type: Sequelize.DataTypes.DATE,
     },
     oral_exam: {
-      type: Sequelize.DataTypes.BOOLEAN,
+      type: Sequelize.DataTypes.DATE,
+    },
+    date_d_appel: {
+      type: Sequelize.DataTypes.DATE,
     },
     written_exam: {
-      type: Sequelize.DataTypes.BOOLEAN,
+      type: Sequelize.DataTypes.DATE,
     },
     nb_students: {
       type: Sequelize.DataTypes.INTEGER,

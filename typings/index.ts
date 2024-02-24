@@ -43,13 +43,14 @@ export interface CreateOrEditMastersRequest {
   language_required: string;
   recrutement_sur_dossier: boolean;
   exemption_fees: number;
-  entretien_motivation: boolean;
-  oral_exam: boolean;
-  written_exam: boolean;
+  entretien_motivation: Date;
+  oral_exam: Date;
+  date_d_appel: Date;
+  written_exam: Date;
   nb_students: number;
   result_dates: Date;
   date_candidature_deposit: Date;
-  id_bourse: number;
+  id_bourse: number | null;
 }
 export interface DeleteMastersRequest {
   id: number;
@@ -57,32 +58,51 @@ export interface DeleteMastersRequest {
 export interface GetMastersRequest {
   id: number;
 }
+//Masters
+export interface CreateOrEditStudentsRequest {
+  id?: number;
+  name: string;
+  notes: { [x: string]: number }[];
+  nbr_dossier: number;
+  family_name: string;
+  phone: number;
+  email: string;
+  departement: string;
+  annee: number;
+  branch: number;
+  average: number;
+  eligible: boolean;
+  expected_grad_date: Date;
+  comment: string;
+}
+export interface DeleteStudentsRequest {
+  id: number;
+}
+export interface GetStudentsRequest {
+  id: number;
+}
 //StudentsInscription
 export interface CreateOrEditStudentsInscriptionRequest {
-  
-  id: number,
-  name: string,
-  family: string,
-  nbr_dossier: number,
-  type_diploma: string,
-  phone: number,
-  email: string,
-  departement: string,
-  year: number,
-  branch: number,
-  average: number,
-  grades: number,
-  eligible: boolean,
-  expected_grad_date:Date,
-  id_university: number,
-  comment:string,
-
+  id: number;
+  name: string;
+  family: string;
+  nbr_dossier: number;
+  type_diploma: string;
+  phone: number;
+  email: string;
+  departement: string;
+  year: number;
+  branch: number;
+  average: number;
+  grades: number;
+  eligible: boolean;
+  expected_grad_date: Date;
+  id_university: number;
+  comment: string;
 }
 export interface DeleteStudentsInscriptionRequest {
   id: number;
 }
-export interface GetStudentsInscriptionRequest{
-  id:number;
+export interface GetStudentsInscriptionRequest {
+  id: number;
 }
-
-
