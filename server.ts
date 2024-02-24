@@ -6,11 +6,13 @@ import bodyParser from "body-parser";
 import universityRoutes from "./routes/UniversityRoutes";
 import scholarshipRoutes from "./routes/ScholarshipRoutes";
 import mastersRoutes from "./routes/MasterRoutes";
+import studentsinscriptionRoutes from "./routes/StudentsInscriptionRoutes";
 import morgan from "morgan";
 import cors from "cors";
 import Department from "./models/DepartmentModel";
 import Scholarship from "./models/ScholarshipModel";
 import Masters from "./models/MastersModel";
+import StudentsInscription from "./models/StudentsInscriptionModel";
 
 const app = express();
 app.get("/api", (req, res) => {
@@ -34,6 +36,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use("/api/scholarship", scholarshipRoutes);
 app.use("/api/university", universityRoutes);
 app.use("/api/masters", mastersRoutes);
+app.use("/api/studentinscription",studentsinscriptionRoutes);
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });

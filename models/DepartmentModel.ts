@@ -13,10 +13,7 @@ Department.init(
     },
     department_name: {
       type: Sequelize.DataTypes.TEXT,
-    },
-    is_free: {
-      type: Sequelize.DataTypes.BOOLEAN,
-    },
+    }
   },
   {
     // Enable timestamps

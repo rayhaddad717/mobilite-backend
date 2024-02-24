@@ -24,7 +24,7 @@ Inscription.init(
     is_confirmed:{
       type: Sequelize.DataTypes.BOOLEAN,
     },
-    is_boursier:{
+    is_scolarship:{
       type: Sequelize.DataTypes.BOOLEAN,
     }
     

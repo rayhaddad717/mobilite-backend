@@ -48,10 +48,26 @@ export const VALIDATORS = {
   DeleteMastersSchema: Joi.object({
     id: Joi.number().required(),
   }),
-  InscriptionValidatorSchema: Joi.object({
-    Name: Joi.string().required(),
+  //inscription
+  StudentsInscriptionValidatorSchema: Joi.object({
+    id:Joi.number().optional(),
+    name:Joi.string().required(),
+    family:Joi.string().required(),
+    nbr_dossier:Joi.number().required(),
+    type_diploma:Joi.string().required(),
+    phone:Joi.number().required(),
+    email:Joi.string().required(),
+    departement:Joi.string().required(),
+    year:Joi.number().required(),
+    branch:Joi.number().required(),
+    average:Joi.number().required(),
+    grades:Joi.number().required(),
+    eligible: Joi.boolean().required(),
+    expected_grad_date:Joi.date().required(),
+    id_university:Joi.number().required(),
+    comment:Joi.string().optional(),
   }),
-  DeleteInscriptionSchema: Joi.object({
+  DeleteStudentsInscriptionSchema: Joi.object({
     id: Joi.number().required(),
   }),
   DepartmentValidatorSchema: Joi.object({

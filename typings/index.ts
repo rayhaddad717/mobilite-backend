@@ -57,10 +57,32 @@ export interface DeleteMastersRequest {
 export interface GetMastersRequest {
   id: number;
 }
+//StudentsInscription
+export interface CreateOrEditStudentsInscriptionRequest {
+  
+  id: number,
+  name: string,
+  family: string,
+  nbr_dossier: number,
+  type_diploma: string,
+  phone: number,
+  email: string,
+  departement: string,
+  year: number,
+  branch: number,
+  average: number,
+  grades: number,
+  eligible: boolean,
+  expected_grad_date:Date,
+  id_university: number,
+  comment:string,
 
-export interface CreateInscriptionRequest {
-  Name: string;
 }
-export interface DeleteInscriptionRequest {
+export interface DeleteStudentsInscriptionRequest {
   id: number;
 }
+export interface GetStudentsInscriptionRequest{
+  id:number;
+}
+
+

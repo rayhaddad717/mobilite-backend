@@ -1,61 +1,62 @@
 import sequelize from "sequelize";
 import database from "../db";
 import * as Sequelize from "sequelize";
-class AllStudents extends Sequelize.Model {
+class StudentsInscription extends Sequelize.Model {
   declare id: number;
   declare name: string;
 }
-AllStudents.init(
+StudentsInscription.init(
   {
     id: {
       type: Sequelize.DataTypes.INTEGER,
       primaryKey: true,
       autoIncrement: true,
     },
-    Name: {
+    name: {
       type: Sequelize.DataTypes.TEXT,
     },
-    Family:{
+    family:{
       type: Sequelize.DataTypes.TEXT,
     },
-    Nbr_dossier:{
+    nbr_dossier:{
         type:Sequelize.DataTypes.INTEGER,
     },
-    Diplome:{
+    type_diploma:{
         type:Sequelize.DataTypes.INTEGER, //type diplome
     },
-    Phone:{
+    phone:{
         type:Sequelize.DataTypes.INTEGER,
     },
-    Email:{
+    email:{
         type:Sequelize.DataTypes.TEXT,
     },
-    Departement:{
+    departement:{
         type:Sequelize.DataTypes.TEXT, //type departement
     },
-    Annee:{
+    year:{
         type:Sequelize.DataTypes.INTEGER,
     },
-    Branch:{
+    branch:{
         type:Sequelize.DataTypes.INTEGER, //type branch
     },
-    Average:{
+    average:{
        type:Sequelize.DataTypes.INTEGER,
     },
-    Notes:{
+    grades:{
         type:Sequelize.DataTypes.TEXT,
     },
-    Eligible:{
+    eligible:{
         type:Sequelize.DataTypes.BOOLEAN,
     },
-    Expected_Grad_date:{
+    expected_grad_date:{
         type:Sequelize.DataTypes.DATE,
     },
-    Comment:{
+    id_university:{
+        type:Sequelize.DataTypes.INTEGER,
+    },
+    comment:{
         type:Sequelize.DataTypes.TEXT,
-    }
-
-    
+    } 
   },
   {
     // Enable timestamps
@@ -63,4 +64,4 @@ AllStudents.init(
     timestamps: true,
   }
 );
-export default AllStudents;
+export default StudentsInscription;
