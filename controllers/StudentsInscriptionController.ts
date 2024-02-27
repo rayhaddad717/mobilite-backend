@@ -84,11 +84,12 @@ export class StudentsInscriptionController {
   //list inscrit | list autorise | waiting list | accepted list | will travel list
   async exportToExcel(
     type:
-      | "inscrit"
-      | "autorise-elligible"
-      | "non-autorise-list-attente" //NOT ELLIGILE
-      | "admis"
-      | "will-travel"
+      | "inscrit" //enrolled
+      | "autorise-elligible" //eligble
+      | "non-autorise-list-attente" //NOT ELLIGILE enrolled + non autorise
+      | "admis" //is admitted
+      | "will-travel" //entrolled + accepted + confirmed
+      | "boursier"
   ) {
     try {
       const workbook = new ExcelJS.Workbook();
@@ -108,12 +109,18 @@ export class StudentsInscriptionController {
       | "admis"
       | "non-autorise-list-attente" //NOT ELLIGILE
       | "will-travel"
+      | "boursier"
   ): Promise<ExcelJS.Workbook> {
     try {
       // Fetch all masters from the database
       const mastersMap = new Map<number, Masters>();
       const masters = await Masters.findAll({
         order: [["id", "desc"]],
+        include: [
+          {
+            model: Scholarship,
+          },
+        ],
       });
       masters.forEach((master) => mastersMap.set(master.id, master));
       // Fetch all masters from the database
@@ -159,17 +166,29 @@ export class StudentsInscriptionController {
         let columnNamesGlobal: any[] = []; //used for will travel
         let studentRowsGlobal: any[] = []; //used for will travel
         const worksheet = workbook.addWorksheet(dept.name);
+        const includeScholarshipCondition =
+          type === "boursier"
+            ? [
+                {
+                  model: StudentsInscription,
+                  where: {
+                    has_scholarship: true, //has scholarship //filtering
+                  },
+                  required: true,
+                },
+              ]
+            : [{ model: StudentsInscription }];
         const thirdYearStudents = await Students.findAll({
           where: {
             annee: 3,
           },
-          include: [{ model: StudentsInscription }],
+          include: includeScholarshipCondition,
         });
         const fourthYearStudents = await Students.findAll({
           where: {
             annee: 4,
           },
-          include: [{ model: StudentsInscription }],
+          include: includeScholarshipCondition,
         });
         //3RD YEAR
         let i = 0;
@@ -195,19 +214,21 @@ export class StudentsInscriptionController {
               deptRow.getCell(2).value = isThird ? "3eme Annee" : "4eme Annee";
               // worksheet.mergeCells("A2:B2"); // Merge if necessary
 
+              //filtering
               const studentCount = sourceStudents.filter((st) => {
                 if (type === "autorise-elligible") {
                   return (
-                    st.eligible &&
+                    st.eligible && //authorized
                     st.branch === branch.type &&
                     st.departement === dept.type
                   );
                 }
                 if (type === "non-autorise-list-attente") {
                   return (
-                    !st.eligible &&
+                    !st.eligible && //not authorized
                     st.branch === branch.type &&
-                    st.departement === dept.type
+                    st.departement === dept.type &&
+                    st.StudentsInscriptions?.length //enrolled
                   );
                 }
 
@@ -219,9 +240,12 @@ export class StudentsInscriptionController {
               studentCountRow.getCell(1).value = "Nombre d'etudiants";
               studentCountRow.getCell(2).value = studentCount;
               const inscritStudentsRow = worksheet.getRow(headerRow + 4);
+              //filtering
+
               const studentsInscritNumber = sourceStudents.filter((st) => {
                 if (type === "autorise-elligible") {
                   return (
+                    st.StudentsInscriptions?.length &&
                     st.eligible &&
                     st.branch === branch.type &&
                     st.departement === dept.type
@@ -229,9 +253,10 @@ export class StudentsInscriptionController {
                 }
                 if (type === "non-autorise-list-attente") {
                   return (
-                    !st.eligible &&
+                    !st.eligible && //not authorized
                     st.branch === branch.type &&
-                    st.departement === dept.type
+                    st.departement === dept.type &&
+                    st.StudentsInscriptions?.length //enrolled
                   );
                 }
                 return (
@@ -253,7 +278,7 @@ export class StudentsInscriptionController {
                 headerRow += 1;
               }
             }
-
+            //filtering
             const inscritsStudents = sourceStudents.filter((st) => {
               if (type === "autorise-elligible") {
                 return (
@@ -265,9 +290,10 @@ export class StudentsInscriptionController {
               }
               if (type === "non-autorise-list-attente") {
                 return (
+                  st.StudentsInscriptions?.length && //enrolled
                   st.branch === branch.type &&
                   st.departement === dept.type &&
-                  !st.eligible
+                  !st.eligible //not elligible
                 );
               }
               if (type === "will-travel") {
@@ -302,7 +328,8 @@ export class StudentsInscriptionController {
                     Year
                     University
                     */
-                    if (!ins.is_confirmed || !ins.is_admitted) continue;
+                    //filtering
+                    if (!ins.is_confirmed || !ins.is_admitted) continue; //enrolled + confirmed + accepted
                     studentRows.push([
                       student.name + " " + student.family_name,
                       mastersMap.get(ins.master_id)!.type_diploma,
@@ -314,13 +341,27 @@ export class StudentsInscriptionController {
                       student.annee,
                       unisersityMap.get(ins.university_id)!.university_name,
                     ]);
-                  } else {
+                  } else if (type === "boursier") {
+                    //filtering
+
                     studentRows.push([
                       student.name + " " + student.family_name,
                       mastersMap.get(ins.master_id)!.type_diploma,
                       student.average,
                       student.email,
                       "yes",
+                      unisersityMap.get(ins.university_id)!.university_name,
+                      "",
+                      "",
+                      mastersMap.get(ins.master_id)?.Scholarship?.name || "N/A",
+                    ]);
+                  } else {
+                    studentRows.push([
+                      student.name + " " + student.family_name,
+                      mastersMap.get(ins.master_id)!.type_diploma,
+                      student.average,
+                      student.email,
+                      type === "non-autorise-list-attente" ? "no" : "yes",
                       unisersityMap.get(ins.university_id)!.university_name,
                       "",
                       "",
@@ -365,6 +406,9 @@ export class StudentsInscriptionController {
                 filterButton: false,
               },
             ];
+            if (type === "boursier") {
+              columns.push({ name: "Scholarship Name", filterButton: false });
+            }
             if (type === "will-travel") {
               columns = [
                 { name: "Student Name", filterButton: false },
@@ -471,21 +515,20 @@ export class StudentsInscriptionController {
       ];
 
       for (const diploma_type of DiplomeType) {
-        console.table({ diploma_type });
         const worksheet = workbook.addWorksheet(diploma_type.name);
         let admittedStudents = await Students.findAll({
           where: {
             annee: {
               [Op.in]: [3, 4],
             },
-            eligible: true,
+            eligible: true, //authorized
           },
           include: [
             {
               model: StudentsInscription,
-              required: true,
+              required: true, //entrolled
               where: {
-                is_admitted: true,
+                is_admitted: true, //admitted
               },
               include: [
                 {
