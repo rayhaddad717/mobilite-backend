@@ -95,14 +95,14 @@ class BootStrap {
     });
     StudentsInscription.belongsTo(Masters, { foreignKey: "master_id" });
     StudentsInscription.belongsTo(University, { foreignKey: "university_id" });
+    Masters.belongsTo(University, { foreignKey: "university_id" });
+    Masters.belongsTo(Scholarship, { foreignKey: "id_bourse" });
     await University.sync({ alter: true });
     await Scholarship.sync({ alter: true });
     await Masters.sync({ alter: true });
     await Students.sync({ alter: true });
     await Admins.sync({ alter: true });
     await StudentsInscription.sync({ alter: true });
-    Masters.belongsTo(University, { foreignKey: "university_id" });
-    Masters.belongsTo(Scholarship, { foreignKey: "id_bourse" });
   }
 }
 new BootStrap().init();

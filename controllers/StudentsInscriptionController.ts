@@ -36,7 +36,7 @@ export class StudentsInscriptionController {
           "is_confirmed",
           "has_scholarship",
         ],
-        include: [{ model: Students }, { model: University }],
+        include: [{ model: Students, required: true }, { model: University }],
       });
     } catch (error) {
       throw error;
@@ -681,7 +681,9 @@ export class StudentsInscriptionController {
                 const name = row.getCell(1).value;
                 const family_name = row.getCell(2).value;
                 const type_diploma = row.getCell(3).value;
-                const email = row.getCell(4).value;
+                const email = row.getCell(4).isHyperlink
+                  ? row.getCell(4).hyperlink
+                  : row.getCell(4).value;
                 const phone = row.getCell(5).value;
 
                 const nbr_dossier = Number(row.getCell(6).value);
@@ -820,7 +822,9 @@ export class StudentsInscriptionController {
           const studentDetail = await Students.create(student.student);
           toCreatNumeroDuDossier.get(nbr_dossier)!.student =
             studentDetail.toJSON();
-        } catch (error) {}
+        } catch (error) {
+          console.log(error);
+        }
       }
       for (const [nbr_dossier, student] of toCreatNumeroDuDossier.entries()) {
         try {
